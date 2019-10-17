@@ -3,10 +3,7 @@ package com.luv2code.springdemo.rest;
 import com.luv2code.springdemo.entity.Customer;
 import com.luv2code.springdemo.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -32,6 +29,16 @@ public class CustomerRestController {
             throw new CustomerNotFoundException("Customer id not found - " + customerId);
         }
 
+        return theCustomer;
+    }
+
+    // add mapping for POST /customers - add new customer
+    @PostMapping("/customers")
+    public Customer addCustomer(@RequestBody Customer theCustomer) {
+        // also just in case the pass an id in JSON ... set id to 0
+        // this is to force a save new item ... instead of update
+        theCustomer.setId(0);
+        customerService.saveCustomer(theCustomer);
         return theCustomer;
     }
 }
